@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI聊天助手 - 智能对话平台</title>
+    <title>EdgeFNAI 聊天助手</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -11,19 +11,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-        
-        :root {
-            --primary-color: #1a1a1a;
-            --secondary-color: #666;
-            --accent-color: #4a4a4a;
-            --light-color: #f5f5f5;
-            --dark-color: #1a1a1a;
-            --user-message-bg: #1a1a1a;
-            --ai-message-bg: #f0f0f0;
-            --border-radius: 16px;
-            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
         body {
@@ -36,333 +23,102 @@
             padding: 20px;
         }
         
-        .app-container {
+        .container {
             width: 100%;
-            max-width: 1200px;
-            height: 90vh;
+            max-width: 900px;
+            height: 85vh;
             background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             display: flex;
+            flex-direction: column;
             overflow: hidden;
             position: relative;
         }
         
-        /* 侧边栏样式 */
-        .sidebar {
-            width: 300px;
-            background-color: #1a1a1a;
-            color: white;
+        /* 初始界面样式 */
+        .initial-screen {
+            padding: 40px 30px 30px;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            transition: var(--transition);
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background-color: white;
+            opacity: 1;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
         
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid #333;
+        .initial-screen.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .logo i {
-            font-size: 24px;
-            color: white;
-        }
-        
-        .logo h1 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .sidebar-nav {
-            flex: 1;
-            padding: 20px 0;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: var(--transition);
-            border-left: 3px solid transparent;
-        }
-        
-        .nav-item.active {
-            background-color: #333;
-            border-left-color: white;
-        }
-        
-        .nav-item:hover {
-            background-color: #333;
-        }
-        
-        .nav-item i {
-            font-size: 18px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .sidebar-footer {
-            padding: 20px;
-            border-top: 1px solid #333;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 80px;
+            height: 80px;
+            background-color: #1a1a1a;
             border-radius: 50%;
-            background-color: #333;
             display: flex;
-            align-items: center;
             justify-content: center;
-        }
-        
-        /* 主内容区域 */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* 配置界面 */
-        .config-screen {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .config-header {
-            margin-bottom: 30px;
-        }
-        
-        .config-header h2 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .config-header p {
-            color: var(--secondary-color);
-            font-size: 16px;
-        }
-        
-        .api-config-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            flex: 1;
-        }
-        
-        .api-providers {
-            background-color: #f9f9f9;
-            border-radius: var(--border-radius);
-            padding: 25px;
-        }
-        
-        .providers-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .provider-item {
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .provider-item.active {
-            border-color: var(--primary-color);
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .provider-item:hover {
-            border-color: var(--primary-color);
-        }
-        
-        .provider-header {
-            display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-        
-        .provider-icon {
-            width: 24px;
-            height: 24px;
-            background-color: var(--primary-color);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-        }
-        
-        .provider-name {
-            font-weight: 600;
-        }
-        
-        .provider-desc {
-            font-size: 14px;
-            color: var(--secondary-color);
-            line-height: 1.4;
-        }
-        
-        .api-config-form {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            border: 1px solid #eee;
-        }
-        
-        .form-group {
             margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--primary-color);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: var(--transition);
-            background-color: #f9f9f9;
-        }
-        
-        .form-input:focus {
-            border-color: var(--primary-color);
-            background-color: white;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
-        }
-        
-        .form-textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
             color: white;
+            font-size: 32px;
         }
         
-        .btn-primary:hover {
-            background-color: #333;
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background-color: #f0f0f0;
-            color: var(--primary-color);
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e0e0e0;
-        }
-        
-        /* 聊天界面 */
-        .chat-screen {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            display: none;
-        }
-        
-        .chat-header {
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .chat-title {
-            font-size: 20px;
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-size: 24px;
             font-weight: 600;
         }
         
-        .chat-actions {
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .auth-tabs {
             display: flex;
-            gap: 10px;
-        }
-        
-        .chat-action-btn {
-            background: none;
-            border: none;
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--primary-color);
-        }
-        
-        .chat-action-btn:hover {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
             background-color: #f0f0f0;
         }
         
-        .chat-messages {
+        .auth-tab {
             flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
         }
         
-        .message {
-            max-width: 80%;
-            padding: 15px 20px;
-            border-radius: 18px;
-            position: relative;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease;
-            white-space: pre-wrap;
+        .auth-tab.active {
+            background-color: #1a1a1a;
+            color: white;
+        }
+        
+        .auth-content {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .auth-panel {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .auth-panel.active {
+            display: block;
         }
         
         @keyframes fadeIn {
@@ -370,17 +126,211 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        .file-input-container {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .file-input-label {
+            display: block;
+            background-color: #f9f9f9;
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-input-label:hover, .file-input-label:active {
+            background-color: #f0f0f0;
+            border-color: #1a1a1a;
+        }
+        
+        .file-input-label i {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1a1a1a;
+            text-align: left;
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        .text-input:focus {
+            border-color: #1a1a1a;
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.1);
+        }
+        
+        .btn {
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .btn:hover, .btn:active {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background-color: #ccc;
+            color: #999;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 聊天界面样式 */
+        .chat-screen {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            background-color: white;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        
+        .chat-screen.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .chat-header {
+            padding: 16px 20px;
+            background-color: white;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            animation: slideDown 0.4s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .chat-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-controls button {
+            background: none;
+            border: none;
+            color: #1a1a1a;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .chat-controls button:hover, .chat-controls button:active {
+            background-color: #f0f0f0;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            max-width: 90%;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: messageAppear 0.4s ease forwards;
+        }
+        
+        @keyframes messageAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         .user-message {
             align-self: flex-end;
-            background-color: var(--user-message-bg);
-            color: white;
-            border-bottom-right-radius: 4px;
         }
         
         .ai-message {
             align-self: flex-start;
-            background-color: var(--ai-message-bg);
-            color: var(--dark-color);
+        }
+        
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+        
+        .user-message .message-bubble {
+            background-color: #1a1a1a;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-message .message-bubble {
+            background-color: #f0f0f0;
+            color: #1a1a1a;
             border-bottom-left-radius: 4px;
         }
         
@@ -396,55 +346,63 @@
         }
         
         .ai-message .message-sender {
-            color: var(--secondary-color);
+            color: #666;
         }
         
-        .chat-input-area {
-            padding: 20px;
+        .chat-input-container {
+            padding: 12px 16px;
+            background-color: white;
             border-top: 1px solid #eee;
-        }
-        
-        .input-container {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            animation: slideUp 0.4s ease;
         }
         
-        .message-input {
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-input {
             flex: 1;
-            padding: 15px 20px;
+            padding: 12px 16px;
             border: 1px solid #ddd;
             border-radius: 24px;
+            outline: none;
             font-size: 16px;
-            transition: var(--transition);
+            transition: all 0.3s;
             background-color: #f9f9f9;
         }
         
-        .message-input:focus {
-            border-color: var(--primary-color);
-            background-color: white;
-            outline: none;
+        .chat-input:focus {
+            border-color: #1a1a1a;
+            background-color: #fff;
         }
         
-        .send-button {
-            background-color: var(--primary-color);
+        .send-btn {
+            background-color: #1a1a1a;
             color: white;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-left: 10px;
             cursor: pointer;
-            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
         }
         
-        .send-button:hover {
+        .send-btn:hover, .send-btn:active {
             background-color: #333;
             transform: scale(1.05);
         }
         
-        .send-button:disabled {
+        .send-btn:disabled {
             background-color: #ccc;
             cursor: not-allowed;
             transform: none;
@@ -453,13 +411,13 @@
         .typing-indicator {
             display: none;
             padding: 10px 16px;
-            background-color: var(--ai-message-bg);
+            background-color: #f0f0f0;
             border-radius: 18px;
             max-width: 70%;
             margin-bottom: 16px;
             align-self: flex-start;
             border-bottom-left-radius: 4px;
-            animation: fadeIn 0.3s ease;
+            animation: messageAppear 0.4s ease;
         }
         
         .typing-dots {
@@ -494,23 +452,98 @@
             }
         }
         
-        .welcome-message {
-            text-align: center;
-            padding: 40px 20px;
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .status-text {
+            font-size: 14px;
             color: #666;
         }
         
-        .welcome-message h2 {
-            margin-bottom: 10px;
-            color: var(--primary-color);
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .container {
+                height: 95vh;
+            }
+            
+            .initial-screen {
+                padding: 30px 20px 20px;
+            }
+            
+            .chat-screen {
+                height: 95vh;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+            
+            .chat-header {
+                padding: 12px 16px;
+            }
+            
+            .chat-messages {
+                padding: 12px 16px;
+            }
+            
+            .chat-input-container {
+                padding: 10px 16px;
+            }
         }
         
-        .welcome-message p {
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
+        /* 自定义滚动条 */
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
         }
         
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        /* 底部安全区域适配 */
+        @supports (padding: max(0px)) {
+            .chat-input-container {
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
+            }
+        }
+        
+        /* 代码块样式 */
         .code-block {
             background-color: #2d2d2d;
             color: #f8f8f2;
@@ -523,496 +556,448 @@
             line-height: 1.4;
         }
         
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column;
-                height: 95vh;
-            }
-            
-            .sidebar {
-                width: 100%;
-                height: auto;
-            }
-            
-            .api-config-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .message {
-                max-width: 90%;
-            }
+        .code-block::-webkit-scrollbar {
+            height: 6px;
         }
         
-        /* 自定义滚动条 */
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .chat-messages::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
+        .code-block::-webkit-scrollbar-track {
+            background: #1e1e1e;
             border-radius: 3px;
         }
         
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+        .code-block::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb:hover {
+            background: #777;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- 侧边栏 -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fas fa-robot"></i>
-                    <h1>AI聊天助手</h1>
-                </div>
-                <p class="subtitle">智能对话平台</p>
+    <div class="container">
+        <!-- 初始界面 -->
+        <div class="initial-screen" id="initialScreen">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h1>EdgeFNAI 聊天助手</h1>
+            <p class="subtitle">请设置API密钥以开始聊天</p>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="file">文件上传</div>
+                <div class="auth-tab" data-tab="manual">手动输入</div>
             </div>
             
-            <div class="sidebar-nav">
-                <div class="nav-item active" data-screen="config">
-                    <i class="fas fa-cog"></i>
-                    <span>API配置</span>
+            <div class="auth-content">
+                <!-- 文件上传面板 -->
+                <div class="auth-panel active" id="filePanel">
+                    <div class="file-input-container">
+                        <label for="apiFile" class="file-input-label">
+                            <i class="fas fa-file-upload"></i>
+                            点击选择 API 密钥文件
+                            <div class="file-name" id="fileName">支持 .txt 或其他文本格式</div>
+                        </label>
+                        <input type="file" id="apiFile" class="file-input" accept=".txt,text/plain">
+                        <div class="error-message" id="fileError"></div>
+                    </div>
                 </div>
-                <div class="nav-item" data-screen="chat">
-                    <i class="fas fa-comments"></i>
-                    <span>开始聊天</span>
-                </div>
-                <div class="nav-item" data-screen="help">
-                    <i class="fas fa-question-circle"></i>
-                    <span>使用帮助</span>
+                
+                <!-- 手动输入面板 -->
+                <div class="auth-panel" id="manualPanel">
+                    <div class="input-group">
+                        <label class="input-label" for="apiKeyInput">API 密钥</label>
+                        <input type="text" id="apiKeyInput" class="text-input" placeholder="请输入您的 API 密钥">
+                        <div class="error-message" id="manualError"></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="user-details">
-                        <div class="user-name">访客用户</div>
-                        <div class="user-status">已就绪</div>
-                    </div>
-                </div>
-            </div>
+            <button class="btn" id="startChatBtn" disabled>
+                <i class="fas fa-comments"></i> 开始聊天
+            </button>
         </div>
-        
-        <!-- 主内容区域 -->
-        <div class="main-content">
-            <!-- API配置界面 -->
-            <div class="config-screen" id="configScreen">
-                <div class="config-header">
-                    <h2>API配置</h2>
-                    <p>配置您的AI服务提供商，开始智能对话体验</p>
+
+        <!-- 聊天界面 -->
+        <div class="chat-screen" id="chatScreen">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <span class="status-indicator"></span>
+                    EdgeFNAI 助手
                 </div>
-                
-                <div class="api-config-grid">
-                    <div class="api-providers">
-                        <h3>选择服务商</h3>
-                        <div class="providers-list">
-                            <div class="provider-item active" data-provider="baishan">
-                                <div class="provider-header">
-                                    <div class="provider-icon">白</div>
-                                    <div class="provider-name">白山云AI</div>
-                                </div>
-                                <div class="provider-desc">
-                                    国内AI服务提供商，访问速度快，支持中文优化
-                                </div>
-                            </div>
-                            <div class="provider-item" data-provider="openai">
-                                <div class="provider-header">
-                                    <div class="provider-icon">O</div>
-                                    <div class="provider-name">OpenAI</div>
-                                </div>
-                                <div class="provider-desc">
-                                    国际领先的AI服务，功能强大，支持多种模型
-                                </div>
-                            </div>
-                            <div class="provider-item" data-provider="custom">
-                                <div class="provider-header">
-                                    <div class="provider-icon">C</div>
-                                    <div class="provider-name">自定义API</div>
-                                </div>
-                                <div class="provider-desc">
-                                    配置您自己的AI API服务，支持任何兼容OpenAI的接口
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="api-config-form">
-                        <!-- 白山云配置 -->
-                        <div class="provider-config active" id="baishan-config">
-                            <h3>白山云AI配置</h3>
-                            <p class="provider-info">
-                                访问 <a href="http://ai.baishan.com/account/index" target="_blank">白山云AI平台</a> 注册账号并获取API密钥
-                            </p>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="baishan-api-key">API密钥</label>
-                                <input type="password" id="baishan-api-key" class="form-input" placeholder="请输入白山云API密钥">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="baishan-api-url">API地址</label>
-                                <input type="text" id="baishan-api-url" class="form-input" value="https://api.baishan.com/v1/chat/completions" placeholder="API服务地址">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="baishan-model">模型名称</label>
-                                <input type="text" id="baishan-model" class="form-input" value="gpt-3.5-turbo" placeholder="模型名称">
-                            </div>
-                        </div>
-                        
-                        <!-- OpenAI配置 -->
-                        <div class="provider-config" id="openai-config">
-                            <h3>OpenAI配置</h3>
-                            <p class="provider-info">
-                                访问 <a href="https://platform.openai.com" target="_blank">OpenAI平台</a> 获取API密钥
-                            </p>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="openai-api-key">API密钥</label>
-                                <input type="password" id="openai-api-key" class="form-input" placeholder="请输入OpenAI API密钥">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="openai-api-url">API地址</label>
-                                <input type="text" id="openai-api-url" class="form-input" value="https://api.openai.com/v1/chat/completions" placeholder="API服务地址">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="openai-model">模型名称</label>
-                                <input type="text" id="openai-model" class="form-input" value="gpt-3.5-turbo" placeholder="模型名称">
-                            </div>
-                        </div>
-                        
-                        <!-- 自定义配置 -->
-                        <div class="provider-config" id="custom-config">
-                            <h3>自定义API配置</h3>
-                            <p class="provider-info">
-                                配置您自己的AI API服务
-                            </p>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="custom-api-key">API密钥</label>
-                                <input type="password" id="custom-api-key" class="form-input" placeholder="请输入API密钥">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="custom-api-url">API地址</label>
-                                <input type="text" id="custom-api-url" class="form-input" placeholder="https://your-api.com/v1/chat/completions">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="custom-model">模型名称</label>
-                                <input type="text" id="custom-model" class="form-input" placeholder="模型名称（可选）">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="custom-headers">自定义请求头 (JSON格式)</label>
-                                <textarea id="custom-headers" class="form-input form-textarea" placeholder='{"X-Custom-Header": "value"}'></textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button class="btn btn-primary" id="saveConfigBtn">
-                                <i class="fas fa-save"></i> 保存配置
-                            </button>
-                            <button class="btn btn-secondary" id="testConfigBtn">
-                                <i class="fas fa-vial"></i> 测试连接
-                            </button>
-                        </div>
+                <div class="chat-controls">
+                    <button id="clearChatBtn" title="清空对话">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button id="backBtn" title="返回">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">
+                    <div class="message-bubble">
+                        <div class="message-sender">AI助手</div>
+                        你好！我是EdgeFNAI助手，有什么可以帮您的吗？
                     </div>
                 </div>
             </div>
             
-            <!-- 聊天界面 -->
-            <div class="chat-screen" id="chatScreen">
-                <div class="chat-header">
-                    <div class="chat-title">AI聊天助手</div>
-                    <div class="chat-actions">
-                        <button class="chat-action-btn" id="clearChatBtn" title="清空对话">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                        <button class="chat-action-btn" id="exportChatBtn" title="导出对话">
-                            <i class="fas fa-download"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="chat-messages" id="chatMessages">
-                    <div class="welcome-message">
-                        <h2>欢迎使用AI聊天助手</h2>
-                        <p>我是您的智能助手，可以回答各种问题、提供信息、帮助解决问题等。请在下方输入您的问题，我会尽力为您解答。</p>
-                    </div>
-                </div>
-                
-                <div class="typing-indicator" id="typingIndicator">
-                    <div class="typing-dots">
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                    </div>
-                </div>
-                
-                <div class="chat-input-area">
-                    <div class="input-container">
-                        <input type="text" class="message-input" id="messageInput" placeholder="输入您的问题..." autocomplete="off">
-                        <button class="send-button" id="sendButton">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
                 </div>
             </div>
             
-            <!-- 帮助界面 -->
-            <div class="config-screen" id="helpScreen" style="display: none;">
-                <div class="config-header">
-                    <h2>使用帮助</h2>
-                    <p>了解如何配置和使用AI聊天助手</p>
-                </div>
-                
-                <div class="api-config-grid">
-                    <div class="api-providers">
-                        <h3>快速指南</h3>
-                        <div class="providers-list">
-                            <div class="provider-item">
-                                <div class="provider-header">
-                                    <div class="provider-icon">1</div>
-                                    <div class="provider-name">获取API密钥</div>
-                                </div>
-                                <div class="provider-desc">
-                                    注册AI服务提供商账号并获取API密钥
-                                </div>
-                            </div>
-                            <div class="provider-item">
-                                <div class="provider-header">
-                                    <div class="provider-icon">2</div>
-                                    <div class="provider-name">配置API</div>
-                                </div>
-                                <div class="provider-desc">
-                                    在API配置页面输入API密钥和服务地址
-                                </div>
-                            </div>
-                            <div class="provider-item">
-                                <div class="provider-header">
-                                    <div class="provider-icon">3</div>
-                                    <div class="provider-name">开始对话</div>
-                                </div>
-                                <div class="provider-desc">
-                                    保存配置后即可开始与AI对话
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="api-config-form">
-                        <h3>详细说明</h3>
-                        
-                        <div class="form-group">
-                            <h4>白山云AI注册指南</h4>
-                            <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.6;">
-                                <li>访问 <a href="http://ai.baishan.com/account/index" target="_blank">白山云AI平台</a></li>
-                                <li>点击注册账号，填写相关信息</li>
-                                <li>完成邮箱验证和手机验证</li>
-                                <li>登录后进入用户中心</li>
-                                <li>在API管理页面创建新的API密钥</li>
-                                <li>复制API密钥到本应用配置中</li>
-                            </ol>
-                        </div>
-                        
-                        <div class="form-group">
-                            <h4>OpenAI注册指南</h4>
-                            <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.6;">
-                                <li>访问 <a href="https://platform.openai.com" target="_blank">OpenAI平台</a></li>
-                                <li>点击Sign up注册新账号</li>
-                                <li>完成邮箱验证和手机验证</li>
-                                <li>登录后进入API Keys页面</li>
-                                <li>点击"Create new secret key"创建API密钥</li>
-                                <li>复制API密钥到本应用配置中</li>
-                            </ol>
-                        </div>
-                        
-                        <div class="form-group">
-                            <h4>部署说明</h4>
-                            <p>本应用为纯前端应用，可直接部署到任何静态网站托管服务：</p>
-                            <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.6;">
-                                <li>GitHub Pages</li>
-                                <li>Vercel</li>
-                                <li>Netlify</li>
-                                <li>自有服务器</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="输入消息...">
+                <button class="send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM元素
-            const navItems = document.querySelectorAll('.nav-item');
-            const screens = {
-                config: document.getElementById('configScreen'),
-                chat: document.getElementById('chatScreen'),
-                help: document.getElementById('helpScreen')
-            };
-            
-            const providerItems = document.querySelectorAll('.provider-item');
-            const providerConfigs = document.querySelectorAll('.provider-config');
-            const messageInput = document.getElementById('messageInput');
-            const sendButton = document.getElementById('sendButton');
+            // 获取DOM元素
+            const initialScreen = document.getElementById('initialScreen');
+            const chatScreen = document.getElementById('chatScreen');
+            const authTabs = document.querySelectorAll('.auth-tab');
+            const authPanels = document.querySelectorAll('.auth-panel');
+            const apiFileInput = document.getElementById('apiFile');
+            const fileName = document.getElementById('fileName');
+            const fileError = document.getElementById('fileError');
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            const manualError = document.getElementById('manualError');
+            const startChatBtn = document.getElementById('startChatBtn');
             const chatMessages = document.getElementById('chatMessages');
-            const typingIndicator = document.getElementById('typingIndicator');
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
             const clearChatBtn = document.getElementById('clearChatBtn');
-            const saveConfigBtn = document.getElementById('saveConfigBtn');
-            const testConfigBtn = document.getElementById('testConfigBtn');
+            const backBtn = document.getElementById('backBtn');
+            const typingIndicator = document.getElementById('typingIndicator');
             
-            // 应用状态
-            let currentProvider = 'baishan';
-            let apiConfig = {
-                baishan: { apiKey: '', apiUrl: '', model: 'gpt-3.5-turbo' },
-                openai: { apiKey: '', apiUrl: '', model: 'gpt-3.5-turbo' },
-                custom: { apiKey: '', apiUrl: '', model: '', headers: '' }
-            };
+            let apiKey = '';
             let conversationHistory = [];
+            let currentAuthMethod = 'file';
+            let loadingElement = null; // 跟踪当前的加载元素
             
-            // 从localStorage加载配置
-            function loadConfig() {
-                const savedConfig = localStorage.getItem('aiChatConfig');
-                if (savedConfig) {
-                    apiConfig = JSON.parse(savedConfig);
-                    // 更新表单值
-                    updateFormValues();
+            // 模拟后端API调用
+            class EdgeFNAI {
+                constructor(apiKey) {
+                    this.apiKey = apiKey;
+                    this.url = "https://api.edgefn.net/v1/chat/completions";
+                    this.model = "DeepSeek-R1-0528-Qwen3-8B";
+                }
+                
+                async sendMessage(message, conversationHistory) {
+                    // 将用户消息添加到对话历史
+                    conversationHistory.push({"role": "user", "content": message});
+                    
+                    const data = {
+                        "model": this.model,
+                        "messages": conversationHistory
+                    };
+                    
+                    const headers = {
+                        "Authorization": `Bearer ${this.apiKey}`,
+                        "Content-Type": "application/json"
+                    };
+                    
+                    try {
+                        const response = await fetch(this.url, {
+                            method: 'POST',
+                            headers: headers,
+                            body: JSON.stringify(data)
+                        });
+                        
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`API请求失败: ${response.status} ${response.statusText}. ${errorText}`);
+                        }
+                        
+                        const result = await response.json();
+                        const aiReply = result.choices[0].message.content;
+                        
+                        // 将AI回复添加到对话历史
+                        conversationHistory.push({"role": "assistant", "content": aiReply});
+                        
+                        return {reply: aiReply, history: conversationHistory};
+                        
+                    } catch (error) {
+                        console.error('API调用错误:', error);
+                        return {reply: `抱歉，发生错误: ${error.message}`, history: conversationHistory};
+                    }
                 }
             }
             
-            // 保存配置到localStorage
-            function saveConfig() {
-                // 从表单获取当前值
-                updateConfigFromForm();
-                localStorage.setItem('aiChatConfig', JSON.stringify(apiConfig));
-                alert('配置已保存！');
-            }
-            
-            // 从表单更新配置
-            function updateConfigFromForm() {
-                apiConfig.baishan.apiKey = document.getElementById('baishan-api-key').value;
-                apiConfig.baishan.apiUrl = document.getElementById('baishan-api-url').value;
-                apiConfig.baishan.model = document.getElementById('baishan-model').value;
-                
-                apiConfig.openai.apiKey = document.getElementById('openai-api-key').value;
-                apiConfig.openai.apiUrl = document.getElementById('openai-api-url').value;
-                apiConfig.openai.model = document.getElementById('openai-model').value;
-                
-                apiConfig.custom.apiKey = document.getElementById('custom-api-key').value;
-                apiConfig.custom.apiUrl = document.getElementById('custom-api-url').value;
-                apiConfig.custom.model = document.getElementById('custom-model').value;
-                apiConfig.custom.headers = document.getElementById('custom-headers').value;
-            }
-            
-            // 更新表单值
-            function updateFormValues() {
-                document.getElementById('baishan-api-key').value = apiConfig.baishan.apiKey;
-                document.getElementById('baishan-api-url').value = apiConfig.baishan.apiUrl;
-                document.getElementById('baishan-model').value = apiConfig.baishan.model;
-                
-                document.getElementById('openai-api-key').value = apiConfig.openai.apiKey;
-                document.getElementById('openai-api-url').value = apiConfig.openai.apiUrl;
-                document.getElementById('openai-model').value = apiConfig.openai.model;
-                
-                document.getElementById('custom-api-key').value = apiConfig.custom.apiKey;
-                document.getElementById('custom-api-url').value = apiConfig.custom.apiUrl;
-                document.getElementById('custom-model').value = apiConfig.custom.model;
-                document.getElementById('custom-headers').value = apiConfig.custom.headers;
-            }
-            
-            // 切换屏幕
-            function switchScreen(screenName) {
-                // 隐藏所有屏幕
-                Object.values(screens).forEach(screen => {
-                    screen.style.display = 'none';
+            // 标签切换事件
+            authTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // 更新标签状态
+                    authTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新面板状态
+                    authPanels.forEach(panel => panel.classList.remove('active'));
+                    document.getElementById(`${tabId}Panel`).classList.add('active');
+                    
+                    currentAuthMethod = tabId;
+                    validateInputs();
                 });
-                
-                // 显示目标屏幕
-                screens[screenName].style.display = screenName === 'chat' ? 'flex' : 'flex';
-                
-                // 更新导航状态
-                navItems.forEach(item => {
-                    item.classList.remove('active');
-                    if (item.dataset.screen === screenName) {
-                        item.classList.add('active');
+            });
+            
+            // 文件选择事件
+            apiFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // 检查文件类型是否为文本文件
+                    if (file.type === "text/plain" || file.name.endsWith('.txt')) {
+                        fileName.textContent = `已选择: ${file.name}`;
+                        fileError.style.display = 'none';
+                        
+                        // 读取文件内容
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            apiKey = e.target.result.trim();
+                            if (!apiKey) {
+                                fileError.textContent = '错误：文件内容为空，请确保文件包含API密钥';
+                                fileError.style.display = 'block';
+                                startChatBtn.disabled = true;
+                            } else {
+                                startChatBtn.disabled = false;
+                            }
+                        };
+                        reader.onerror = function() {
+                            fileError.textContent = '读取文件时出错，请重试';
+                            fileError.style.display = 'block';
+                            startChatBtn.disabled = true;
+                        };
+                        reader.readAsText(file);
+                    } else {
+                        fileError.textContent = '请选择文本文件（.txt 格式）';
+                        fileError.style.display = 'block';
+                        fileName.textContent = '支持 .txt 或其他文本格式';
+                        startChatBtn.disabled = true;
+                        apiFileInput.value = '';
                     }
-                });
-                
-                // 如果是聊天界面，聚焦输入框
-                if (screenName === 'chat') {
+                }
+            });
+            
+            // 手动输入事件
+            apiKeyInput.addEventListener('input', function() {
+                apiKey = this.value.trim();
+                validateInputs();
+            });
+            
+            // 验证输入函数
+            function validateInputs() {
+                if (currentAuthMethod === 'file') {
+                    // 文件上传模式
+                    if (apiFileInput.files.length > 0 && apiKey) {
+                        startChatBtn.disabled = false;
+                        manualError.style.display = 'none';
+                    } else {
+                        startChatBtn.disabled = true;
+                    }
+                } else {
+                    // 手动输入模式
+                    if (apiKey.length > 0) {
+                        startChatBtn.disabled = false;
+                        manualError.style.display = 'none';
+                    } else {
+                        startChatBtn.disabled = true;
+                        if (apiKeyInput.value.length > 0) {
+                            manualError.textContent = 'API密钥不能为空';
+                            manualError.style.display = 'block';
+                        } else {
+                            manualError.style.display = 'none';
+                        }
+                    }
+                }
+            }
+            
+            // 开始聊天按钮事件
+            startChatBtn.addEventListener('click', function() {
+                if (apiKey) {
+                    // 添加淡出动画
+                    initialScreen.classList.add('hidden');
+                    
+                    // 延迟显示聊天界面
                     setTimeout(() => {
-                        messageInput.focus();
-                    }, 100);
+                        initialScreen.style.display = 'none';
+                        chatScreen.style.display = 'flex';
+                        
+                        // 添加显示动画
+                        setTimeout(() => {
+                            chatScreen.classList.add('active');
+                        }, 50);
+                        
+                        // 添加初始欢迎消息到对话历史
+                        conversationHistory.push({
+                            role: "assistant",
+                            content: "你好！我是EdgeFNAI助手，有什么可以帮您的吗？"
+                        });
+                        
+                        // 聚焦到输入框
+                        setTimeout(() => {
+                            chatInput.focus();
+                        }, 300);
+                    }, 400);
+                }
+            });
+            
+            // 安全移除加载指示器
+            function safeRemoveLoading() {
+                if (loadingElement && loadingElement.parentNode === chatMessages) {
+                    chatMessages.removeChild(loadingElement);
+                }
+                loadingElement = null;
+            }
+            
+            // 发送消息函数
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // 添加用户消息到聊天界面
+                addMessageToChat('user', message);
+                
+                // 清空输入框
+                chatInput.value = '';
+                
+                // 禁用发送按钮
+                sendBtn.disabled = true;
+                
+                // 显示打字指示器
+                typingIndicator.style.display = 'block';
+                scrollToBottom();
+                
+                try {
+                    // 使用模拟后端发送消息
+                    const ai = new EdgeFNAI(apiKey);
+                    const {reply, history} = await ai.sendMessage(message, conversationHistory);
+                    
+                    // 隐藏打字指示器
+                    typingIndicator.style.display = 'none';
+                    
+                    // 添加AI回复到聊天界面
+                    addMessageToChat('assistant', reply, true);
+                    
+                    // 更新对话历史
+                    conversationHistory = history;
+                    
+                } catch (error) {
+                    // 隐藏打字指示器
+                    typingIndicator.style.display = 'none';
+                    
+                    // 显示错误消息
+                    const errorMessage = `抱歉，发生错误: ${error.message}`;
+                    addMessageToChat('assistant', errorMessage);
+                    
+                    // 添加到对话历史
+                    conversationHistory.push({
+                        role: "assistant",
+                        content: errorMessage
+                    });
+                    
+                    console.error('API调用错误:', error);
+                } finally {
+                    // 重新启用发送按钮
+                    sendBtn.disabled = false;
                 }
             }
             
-            // 切换服务提供商
-            function switchProvider(providerName) {
-                currentProvider = providerName;
-                
-                // 更新提供商选择状态
-                providerItems.forEach(item => {
-                    item.classList.remove('active');
-                    if (item.dataset.provider === providerName) {
-                        item.classList.add('active');
-                    }
-                });
-                
-                // 更新配置表单显示
-                providerConfigs.forEach(config => {
-                    config.classList.remove('active');
-                    if (config.id === `${providerName}-config`) {
-                        config.classList.add('active');
-                    }
-                });
-            }
+            // 发送按钮点击事件
+            sendBtn.addEventListener('click', sendMessage);
             
-            // 添加消息到聊天界面
-            function addMessage(content, sender, withTypingEffect = false) {
-                // 如果是第一条AI消息，移除欢迎消息
-                if (sender === 'ai' && chatMessages.querySelector('.welcome-message')) {
-                    chatMessages.querySelector('.welcome-message').remove();
+            // 输入框回车事件
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
                 }
+            });
+            
+            // 清空对话按钮事件
+            clearChatBtn.addEventListener('click', function() {
+                chatMessages.innerHTML = '';
+                conversationHistory = [];
                 
-                const messageElement = document.createElement('div');
-                messageElement.className = `message ${sender}-message`;
+                // 添加初始欢迎消息
+                addMessageToChat('assistant', "对话历史已清空。有什么可以帮您的吗？");
+                conversationHistory.push({
+                    role: "assistant",
+                    content: "对话历史已清空。有什么可以帮您的吗？"
+                });
+            });
+            
+            // 返回按钮事件
+            backBtn.addEventListener('click', function() {
+                // 添加淡出动画
+                chatScreen.classList.remove('active');
+                
+                // 延迟显示初始界面
+                setTimeout(() => {
+                    chatScreen.style.display = 'none';
+                    initialScreen.style.display = 'flex';
+                    
+                    // 添加显示动画
+                    setTimeout(() => {
+                        initialScreen.classList.remove('hidden');
+                    }, 50);
+                    
+                    // 重置文件选择
+                    if (currentAuthMethod === 'file') {
+                        apiFileInput.value = '';
+                        fileName.textContent = '支持 .txt 或其他文本格式';
+                    } else {
+                        apiKeyInput.value = '';
+                    }
+                    startChatBtn.disabled = true;
+                }, 400);
+            });
+            
+            // 添加消息到聊天界面函数
+            function addMessageToChat(sender, message, withTypingEffect = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'message-bubble';
                 
                 const senderDiv = document.createElement('div');
                 senderDiv.className = 'message-sender';
                 senderDiv.textContent = sender === 'user' ? '你' : 'AI助手';
                 
                 const contentDiv = document.createElement('div');
-                contentDiv.className = 'message-content';
                 
                 // 处理代码块
-                const processedContent = processMessage(content);
-                contentDiv.innerHTML = processedContent;
+                const processedMessage = processMessage(message);
+                if (processedMessage.containsCode) {
+                    contentDiv.innerHTML = processedMessage.html;
+                } else {
+                    contentDiv.textContent = message;
+                }
                 
-                messageElement.appendChild(senderDiv);
-                messageElement.appendChild(contentDiv);
-                chatMessages.appendChild(messageElement);
+                bubbleDiv.appendChild(senderDiv);
+                bubbleDiv.appendChild(contentDiv);
+                messageDiv.appendChild(bubbleDiv);
+                
+                chatMessages.appendChild(messageDiv);
                 
                 if (withTypingEffect) {
                     // 打字机效果
+                    let i = 0;
                     const originalContent = contentDiv.innerHTML;
                     contentDiv.innerHTML = '';
                     
-                    let i = 0;
                     const typingEffect = setInterval(() => {
                         if (i < originalContent.length) {
                             contentDiv.innerHTML = originalContent.substring(0, i + 1);
@@ -1029,205 +1014,39 @@
             
             // 处理消息中的代码块
             function processMessage(message) {
-                // 简单的代码块检测
+                // 简单的代码块检测（实际应用中可以使用更复杂的正则表达式）
                 const codeBlockRegex = /```([\s\S]*?)```/g;
+                let containsCode = false;
                 let html = message;
                 
                 // 如果有代码块，用pre标签包装
                 if (codeBlockRegex.test(message)) {
+                    containsCode = true;
                     html = message.replace(codeBlockRegex, '<pre class="code-block">$1</pre>');
                 }
                 
-                return html;
+                return {
+                    containsCode,
+                    html
+                };
             }
             
-            // 滚动到底部
+            // 滚动到底部函数
             function scrollToBottom() {
                 setTimeout(() => {
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }, 100);
             }
             
-            // 发送消息
-            async function sendMessage() {
-                const message = messageInput.value.trim();
-                if (!message) return;
-                
-                const currentConfig = apiConfig[currentProvider];
-                if (!currentConfig.apiKey) {
-                    alert('请先配置API密钥');
-                    switchScreen('config');
-                    return;
-                }
-                
-                // 添加用户消息
-                addMessage(message, 'user');
-                messageInput.value = '';
-                sendButton.disabled = true;
-                
-                // 显示打字指示器
-                typingIndicator.style.display = 'block';
-                scrollToBottom();
-                
-                try {
-                    // 准备请求数据
-                    const requestData = {
-                        model: currentConfig.model || 'gpt-3.5-turbo',
-                        messages: [...conversationHistory, { role: "user", content: message }],
-                        stream: false
-                    };
-                    
-                    // 准备请求头
-                    const headers = {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${currentConfig.apiKey}`
-                    };
-                    
-                    // 添加自定义请求头（如果有）
-                    if (currentProvider === 'custom' && currentConfig.headers) {
-                        try {
-                            const customHeaders = JSON.parse(currentConfig.headers);
-                            Object.assign(headers, customHeaders);
-                        } catch (e) {
-                            console.error('解析自定义请求头失败:', e);
-                        }
-                    }
-                    
-                    // 发送请求
-                    const response = await fetch(currentConfig.apiUrl, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(requestData)
-                    });
-                    
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        throw new Error(`API请求失败: ${response.status} ${response.statusText}. ${errorText}`);
-                    }
-                    
-                    const result = await response.json();
-                    
-                    // 隐藏打字指示器
-                    typingIndicator.style.display = 'none';
-                    
-                    // 获取AI回复
-                    const aiReply = result.choices[0].message.content;
-                    
-                    // 添加AI回复
-                    addMessage(aiReply, 'ai', true);
-                    
-                    // 更新对话历史
-                    conversationHistory.push(
-                        { role: "user", content: message },
-                        { role: "assistant", content: aiReply }
-                    );
-                    
-                } catch (error) {
-                    // 隐藏打字指示器
-                    typingIndicator.style.display = 'none';
-                    
-                    // 显示错误消息
-                    const errorMessage = `抱歉，发生错误: ${error.message}`;
-                    addMessage(errorMessage, 'ai');
-                    
-                    console.error('API调用错误:', error);
-                } finally {
-                    sendButton.disabled = false;
-                }
-            }
+            // 初始化时滚动到底部
+            scrollToBottom();
             
-            // 测试API连接
-            async function testConnection() {
-                const currentConfig = apiConfig[currentProvider];
-                if (!currentConfig.apiKey) {
-                    alert('请先输入API密钥');
-                    return;
-                }
-                
-                try {
-                    saveConfigBtn.disabled = true;
-                    testConfigBtn.disabled = true;
-                    testConfigBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 测试中...';
-                    
-                    const requestData = {
-                        model: currentConfig.model || 'gpt-3.5-turbo',
-                        messages: [{ role: "user", content: "Hello" }],
-                        max_tokens: 5
-                    };
-                    
-                    const headers = {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${currentConfig.apiKey}`
-                    };
-                    
-                    const response = await fetch(currentConfig.apiUrl, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(requestData)
-                    });
-                    
-                    if (response.ok) {
-                        alert('连接测试成功！');
-                    } else {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    
-                } catch (error) {
-                    alert('连接测试失败: ' + error.message);
-                } finally {
-                    saveConfigBtn.disabled = false;
-                    testConfigBtn.disabled = false;
-                    testConfigBtn.innerHTML = '<i class="fas fa-vial"></i> 测试连接';
-                }
-            }
-            
-            // 清空对话
-            function clearChat() {
-                chatMessages.innerHTML = '';
-                conversationHistory = [];
-                
-                // 添加欢迎消息
-                const welcomeMessage = document.createElement('div');
-                welcomeMessage.className = 'welcome-message';
-                welcomeMessage.innerHTML = `
-                    <h2>对话已清空</h2>
-                    <p>请输入您的问题，我会尽力为您解答。</p>
-                `;
-                chatMessages.appendChild(welcomeMessage);
-                
-                scrollToBottom();
-            }
-            
-            // 事件监听器
-            navItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    switchScreen(item.dataset.screen);
-                });
+            // 移动端优化：点击输入框时自动调整视口
+            chatInput.addEventListener('focus', function() {
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 300);
             });
-            
-            providerItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    switchProvider(item.dataset.provider);
-                });
-            });
-            
-            sendButton.addEventListener('click', sendMessage);
-            
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-            
-            saveConfigBtn.addEventListener('click', saveConfig);
-            
-            testConfigBtn.addEventListener('click', testConnection);
-            
-            clearChatBtn.addEventListener('click', clearChat);
-            
-            // 初始化应用
-            loadConfig();
-            switchScreen('config');
         });
     </script>
 </body>
